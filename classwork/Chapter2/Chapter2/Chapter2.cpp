@@ -7,6 +7,7 @@
  */
 //Preprocessor directive
 #include <iostream>
+#include <string>
 
 int main()
 {
@@ -98,8 +99,56 @@ int main()
     bool isPassing;
     isPassing = true;
 
+    area = length * width;
+
     //Assignment is right associative
     //length = 100;
     //width = 100;
-    length = width = 100;
+    length = width = 100;        
+    //std::cout << length;  //Verify length is correct
+
+    //Arithmetic operators
+    // arith_op ::= + | - | * | / | %
+    length = length + 10;
+    width = width - 20;
+
+    // int division ::= int / int produces an int, remainder is lost
+    int result = 10 / 3;  // = 3
+
+    // Modulus is remainder and ONLY works for integral types
+    int remainder = 10 % 3;  // = 1
+
+    int negativeLength = -length;
+
+    //Scope - lifetime of a variable
+    { //Starting a new block
+        int newVariable1 = 10;
+        double newVariable2 = 45.7;
+    }
+
+    {
+        char newVariable1 = 'A';
+    }
+    //std::cout << newVariable1;
+
+    //Strings C++
+    //  Assign value using assignment operator
+    std::string studentName;
+    studentName = "Bob";
+
+    studentName = studentName + " Wilson";
+
+    //Literal - great for static values
+    //Variables - great for writable values
+    //Named constant - variable that has a constant value
+    const double Pi = 3.14159;
+
+    // A = Pi * R2
+    double areaCircle = Pi * (radius * radius);
+
+    const int NumberOfLabGrades = 5;
+    const int NumberOfExamGrades = 4;
+
+    //Cannot write to a constant
+    //Pi = 140;
 }
