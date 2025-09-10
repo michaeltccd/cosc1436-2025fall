@@ -42,13 +42,17 @@ int main()
     //Floating point literals - one or more digits + fraction
     // 3.14159 or 3E10 -3E10 3E-10  3e10 -3e10
 
-    // Variable - Named memory location where data is stored
+    // Variable - Named memory location where data is stored    
     std::string name;
     name = "Name";
     std::cout << "Hello World " << name;
 
     //var-decl ::= T id;
     // type = defines what can be stored in the variable and in what format
+    // id = unique identifier
+    //      Must start with letter or underscore and be followed by letters, digits or underscores
+    //      Must be unique within scope
+    //      Cannot be a keyword
     int age;
     age = 20;
     std::cout << "You are " << age << " years old";
@@ -70,14 +74,15 @@ int main()
 
     std::cout << "Area of rectangle is " << area << std::endl;
 
-    //2 different approaches to variable declarations
-    // Block - all variables together
+    // 2 different approaches to variable declarations
+    // Approach #1 Block - all variables together
     //int radius, diameter;
     //std::string circleName;
 
     //Now I can use the variables
 
-    //Inline - variables are declared just before they are used
+    // Variable declarations
+    // Approach #2 Inline - variables are declared just before they are used
     int radius, diameter;
     //Use radius, diameter
 
