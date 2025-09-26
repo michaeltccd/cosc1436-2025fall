@@ -4,9 +4,76 @@
  */
 #include <iostream>
 #include <string>
+#include <iomanip>
 
 int main()
 {
+    //Display main menu
+    std::cout << "Movie Library" << std::endl;
+    std::cout << "--------------" << std::endl;
+    std::cout << "A)dd Movie" << std::endl;
+    std::cout << "V)iew Movies" << std::endl;
+    std::cout << "E)dit Movie" << std::endl;
+    std::cout << "D)elete Movie" << std::endl;
+    std::cout << "Q)uit" << std::endl;
+
+    char choice;
+    std::cin >> choice;
+
+    //Validate input
+    //if (choice == "A" || choice == "a")
+    //{
+    //    //TODO: Move add code here
+    //    std::cout << "Add not implemented" << std::endl;
+    //} else if (choice == "V" || choice == "v")
+    //{
+    //    //TODO: Movie view code here
+    //    std::cout << "View not implemented" << std::endl;
+    //} else if (choice == "E" || choice == "e")
+    //{
+    //    std::cout << "Edit Not implemented" << std::endl;
+    //} else if (choice == "D" || choice == "d")
+    //{
+    //    std::cout << "Delete Not implemented" << std::endl;
+    //} else if (choice == "Q" || choice == "q")
+    //{
+    //    return 0;
+    //} else
+    //{
+    //    std::cout << "Invalid choice" << std::endl;
+    //};
+    // Switch :: Replacement for an if-else-if where each if condition is Expr == Value
+    // switch-statement ::= switch (E) { case-statement* [ default-statement ] }
+    // case-statement ::= case E : S 
+    // default-statement ::= default : S
+    // break-statement ::= break ;
+    // 
+    // Switch expression must be either char or an integral expression
+    // case labels must be:
+    //   - Compile time constants (e.g. literal, simple expression)
+    //   - Unique within switch
+    // Case statements fall through to next case unless break statement used
+    // Default statement executes if no cases match expression
+    switch (choice)
+    {        
+        case 'A': std::cout << "Add not implemented" << std::endl; break;
+        case 'a': std::cout << "Add not implemented" << std::endl; break;
+
+        case 'V': std::cout << "View not implemented" << std::endl; break;
+        case 'v': std::cout << "View not implemented" << std::endl; break;
+
+        case 'D': std::cout << "Delete not implemented" << std::endl; break;
+        case 'd': std::cout << "Delete not implemented" << std::endl; break;
+
+        case 'E': std::cout << "Edit not implemented" << std::endl; break;
+        case 'e': std::cout << "Edit not implemented" << std::endl; break;
+
+        case 'Q': return 0;
+        case 'q': return 0;
+
+        default: std::cout << "Invalid choice" << std::endl; break;
+    };
+
     //Movie details
     std::string title;          //Required
     std::string description;    //Optional
@@ -17,6 +84,7 @@ int main()
 
     //Get movie details
     std::cout << "Enter movie title: ";
+    std::cin.ignore();
     std::getline(std::cin, title);
 
     //Title is required
@@ -54,6 +122,7 @@ int main()
     }
 
     std::cout << "Enter the optional description: ";
+    std::cin.ignore();
     std::getline(std::cin, description);
 
     // Validate userRating
@@ -98,14 +167,41 @@ int main()
         isClassic = false;
     else
         std::cout << "You must enter either Y or N";*/
+    isClassic = false;
     if (_strcmpi(input.c_str(), "Y") == 0)
         isClassic = true;
     else 
         if (_strcmpi(input.c_str(), "N") == 0)
             isClassic = false;
         else
-            std::cout << "You must enter either Y or N";
-    //TODO: Handle other values
+            std::cout << "You must enter either Y or N";    
+
+    // View movie
+    //    Title (Year)
+    //    Run Length # min
+    //    User Rating = ##
+    //    Is Classic? 
+    //    [Description]
+    std::cout << std::fixed << std::setprecision(1) << std::endl;
+    std::cout << title << " (" << releaseYear << ")" << std::endl;
+    std::cout << "Run Length " << runLength << " mins" << std::endl;
+    std::cout << "User Rating = " << userRating << std::endl;
+    //std::cout << "Is Classic? " << isClassic << std::endl;
+    /*if (isClassic)
+        std::cout << "Is Classic? Yes" << std::endl;
+    else
+        std::cout << "Is Classic? No" << std::endl;*/
+    /*std::string classicIndicator;
+    if (isClassic)
+        classicIndicator = "Yes";
+    else
+        classicIndicator = "No";*/
+    //Conditional_expression ::= Eb ? Et : Ef
+    //std::string classicIndicator = isClassic ? "Yes" : "No";
+    std::cout << "Is Classic? " << (isClassic ? "Yes" : "No") << std::endl;
+    if (description != "")
+        std::cout << description << std::endl;
+    std::cout << std::endl;
 }
 
 void relationalDemo()
