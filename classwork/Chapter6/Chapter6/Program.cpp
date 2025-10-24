@@ -202,10 +202,69 @@ void EditMovie(Movie& movie)
     DisplayWarning("Not implemented yet");
 }
 
+//Test function overloading
+void Display ( int value )
+{
+    std::cout << "int" << std::endl;
+}
+
+void Display(double value)
+{
+    std::cout << "double" << std::endl;
+}
+
+void Display(float value)
+{
+    std::cout << "float" << std::endl;
+}
+
+void Display ( short value1, double value2 )
+{
+    std::cout << "int, double" << std::endl;
+}
+
+void Display(short value, float)
+{
+    std::cout << "short, float" << std::endl;
+}
+
+void Display(int, short)
+{
+    std::cout << "int, short" << std::endl;
+}
+
+void Display(short, int)
+{
+    std::cout << "int, short" << std::endl;
+}
+
+//void TestFunctionOverloading()
+//{ 
+//    Display(10);   //Display(int)
+//    Display(4.56); // Display(double)
+//    Display((short)34);  // Display(int) -> shortest type coercion
+//    Display(10, 4.56F);  // Display(int, double)
+//
+//    long lValue = 10000L;
+//    Display(lValue, 4.56);
+//
+//    //Display("Hello", 4.56); //Compiler error, no matches
+//    //Display(10, "Hello");   //Compiler error, no matches
+//
+//    Display('c', 4.56F);   // short, float
+//    Display((short)5, (short)10);
+//}
+
 int main()
-{   
-    //Display main menu
+{       
+    //Cannot calculate the size of an array at runtime so use a const int variable
+    const int MaximumMovies = 100;
+
+    //TODO: Leaving this for now to avoid breaking code
     Movie movie;
+    Movie movies[MaximumMovies];
+
+    //Display main menu
     bool done = false;
     do
     {
@@ -243,5 +302,5 @@ int main()
     
     //std::cin.ignore();
     // Function call ::= func () 
-    //ViewMovie();
+    //ViewMovie();    
 }
