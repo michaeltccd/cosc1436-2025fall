@@ -374,8 +374,56 @@ void ArrayDemo()
 }  
 #pragma endregion
 
+void DisplayRow(int values[], int size)
+{
+    for (int row = 0; row < size; ++row)
+    {
+        //Do stuff here
+        std::cout << values[row] << " ";
+    }
+}
+
+//All dimensions beyond first must be specified in parameter declaration
+void DisplayTable(int table[][31], int size)
+{
+    for (int row = 0; row < size; ++row)
+    {
+        DisplayRow(table[row], 31);
+        std::cout << std::endl;
+    }
+}
+
+void MultidimensionalArrayDemo()
+{
+    //Months are the rows, days are columns
+    // Init syntax is 1 row at a time
+    //int months[12][31] = { 1, 2, 3 , 4, 5 };
+    int months[12][31] = {
+                            { 1, 2, 3, 4, 5 },   //Row 1
+                            { 2, 4, 6, 8, 10 },  //Row 2
+                        };
+
+    //Arrays stored in either (depending on language
+    //  row major order: each row's data is stored consecutively in memory (C++)
+    //  column major order: each column's data is stored consecutively in memory
+    //Ensure for loops match ordering
+    //  row major: outer loop is rows, inner loop is columns
+    //  column major: outer loop is cols, inner loop is rows
+    // Failure to follow ordering results in excessive performance hits including
+    //   extra memory loading, bad caching and paging out of data
+    for (int row = 0; row < 12; ++row)
+        for (int col = 0; col < 31; ++col)
+        {
+            //Do stuff here
+            months[row][col] = (row + 1) * (col + 1);
+        }
+
+    DisplayTable(months, 12);
+}
+
 int main()
 {       
+    MultidimensionalArrayDemo();
     //ArrayDemo();
     //std::cout << Factorial(5) << std::endl;
 
