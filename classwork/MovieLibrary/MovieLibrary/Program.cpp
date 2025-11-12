@@ -85,6 +85,10 @@ void DisplayWarning(std::string message)
     ResetTextColor();
 }
 
+/// <summary>Reads an integer from the terminal.</summary>
+/// <param name="minimumValue">Minimum value</param>
+/// <param name="maximumValue">Maximum value</param>
+/// <returns>Integer value provided by user</returns>
 int ReadInt ( int minimumValue, int maximumValue )
 {    
     do
@@ -99,11 +103,18 @@ int ReadInt ( int minimumValue, int maximumValue )
     } while (true);   
 }
 
+/// <summary>Reads an integer from the terminal.</summary>
+/// <param name="minimumValue">Minimum value</param>
+/// <returns>Integer value provided by user</returns>
 int ReadInt(int minimumValue)
 {
     return ReadInt(minimumValue, INT_MAX);
 }
 
+/// <summary>Reads a string from the terminal.</summary>
+/// <param name="message">Message to show</param>
+/// <param name="isRequired">true if the input is required</param>
+/// <returns>String value provided by user.</returns>
 std::string ReadString ( std::string message, bool isRequired )
 {    
     std::cout << message;
@@ -121,6 +132,11 @@ std::string ReadString ( std::string message, bool isRequired )
     return input;
 }
 
+/// <summary>Adds a movie to an array.</summary>
+/// <param name="movies">Array</param>
+/// <param name="size">Size of the array</param>
+/// <param name="movie">Movie to add</param>
+/// <returns>Index of new movie if inserted or -1 otherwise.</returns>
 int AddToMovieArray(Movie movies[], int size, Movie movie)
 {
     //Enumerate the array looking for the first blank movie
@@ -232,15 +248,18 @@ void PointerDemo()
 {    
     int localInt = 1234;
 
-    //Pointer to an int
+    //Pointer - memory address    
+    //Data points
     //  Pointer value is a memory address (8 bytes)
     //  Value pointed to by pointer (dereferenced value) is int (4 bytes)
-    int* pInt;
+    // pointer_decl ::= T* id
+    int* pInt;              //Pointer to an int
     pInt = &localInt;
 
     localInt =9876;
 
     // Dereferencing a pointer returns the original type T
+    //   dereference_op := *ptr
     *pInt = 5678;
 }
 
