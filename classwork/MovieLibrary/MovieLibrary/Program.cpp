@@ -261,6 +261,64 @@ void PointerDemo()
     // Dereferencing a pointer returns the original type T
     //   dereference_op := *ptr
     *pInt = 5678;
+
+    //An uninitialized pointer points to garbage
+    // Initialize pointer to memory 0 which is invalid
+    //  NULL - C version, not preferred as it is still an int
+    //  nullptr - preferred in C++
+    //float* pFloat = NULL;    
+    float* pFloat = nullptr;
+    //pFloat = 0;   Don't do this
+    //pFloat = 1234;
+    
+    //Always ensure pointer is valid (not null) before dereferencing
+    //if (pFloat != nullptr) {
+    if (pFloat) {
+        //This is going to crash hard if pointer is NULL
+        *pFloat = 123.45;
+    }
+
+    //Initializing a pointer
+    // nullptr
+    float localFloat = 123.45;
+
+    //Initialize a pointer to a local variable or parameter
+    pFloat = &localFloat;  //Address of localFloat, must be a variable
+    *pFloat = 456.78;   //localFloat = 456.78
+
+    //Initialize a pointer to an array element
+    float someFloats[10] = {0};
+    pFloat = &someFloats[1];   //Ptr references second element
+
+    //Compiler error, types must exactly match
+    //pFloat = pInt;   // float* = int*
+
+    //Dynamic memory
+    // new_op ::= new T  returns T*
+    pFloat = new float;
+    *pFloat = 89.76;    
+
+    for (int index = 0; index < 10000; ++index)
+    {
+        pFloat = new float;
+        *pFloat = index;
+
+        //Deleting a pointer twice will crash or corrupt memory
+        delete pFloat;
+        pFloat = nullptr;
+
+        //Ensure you call delete for each pointer you allocate using new
+        delete pFloat;
+        pFloat = nullptr;
+        //*pFloat = index; //Using a deallocated pointer may crash or corrupt
+    }
+
+    //Pointer assignment must exactly match the types used (no coercion)
+    // pFloat = float*
+    // someFloats[1] = float
+    // &(Et) = T*
+    // &(someFloats[1]) = &(float) = float*
+
 }
 
 int main()
