@@ -32,7 +32,7 @@ enum class ForegroundColor {
 };
 
 //Function prototypes
-void DisplayError(std::string);
+void DisplayError(std::string const&);
 
 void ResetTextColor()
 {
@@ -69,7 +69,7 @@ bool Confirm ( std::string message )
 
 /// <summary>Displays an error message.</summary>
 /// <param name="message">Message to display.</param>
-void DisplayError ( std::string message )
+void DisplayError ( std::string const& message )
 {
     //std::cout << "\033[91m" 
     SetTextColor(ForegroundColor::BrightRed);
@@ -201,6 +201,10 @@ void ViewMovie ( Movie* movie )
     std::cout << std::endl;
 }
 
+void ViewMovie(Movie& movie)
+{
+    ViewMovie(&movie);
+}
 void ViewMovies( Movie* movies[], int size )
 {
     //Enumerate movies until we run out
@@ -437,6 +441,89 @@ void ArrayAndPointerDemo()
     for (int index = 0; index < MaxSize; ++index)
         //std::cout << numbers[index] << std::endl;
         std::cout << *(pElement++) << std::endl;
+}
+
+int* ResizeArray(int array[], int oldSize, int newSize)
+{
+    if (newSize <= 0)
+    {
+        DisplayError("I don't think so");
+        return nullptr;
+    }
+    //int* pNewValue = new int;
+
+    //newSize > 0
+    int* pNewArray = new int[newSize];
+
+    //Init the array because we cannot use init syntax with new
+    for (int index = 0; index < newSize; ++index)
+        pNewArray[index] = 0;
+
+    //Copy values from old to new array
+    oldSize = (oldSize < newSize) ? oldSize : newSize;
+    for (int index = 0; index < oldSize; ++index)
+        pNewArray[index] = array[index];
+
+    return pNewArray;
+}
+
+void DeleteArray(int* array)
+{
+    // Rules
+    // 1. Array better have been allocated using new
+    // 2. You must delete the entire array using delete[]
+    // 3. If delete[] is called on a null ptr it will most likely crash
+    if (array)
+        delete[] array;
+    array = nullptr;
+}
+
+int youWillNeverDoThis = 100;
+int* ReturningAPointerDemo(int someValue, int values[])
+{
+    int* ptr = nullptr;
+
+    // Valid cases for returning a pointer
+    // 1. Dynamically allocated memory using new
+    ptr = new int;
+    // 2. Elements of an array parameter
+    ptr = &values[0];
+    // 3. Global variables
+    ptr = &youWillNeverDoThis;
+
+    // Invalid cases
+    // 1. Parameters  (ptr = &someValue)
+    // 2. Local variables (int localVar; ptr= &localVar;)
+
+    return nullptr;
+}
+
+void ConstantDemo()
+{
+    //Context is generally pointers and references
+    int someValue;
+    int* ptrNonconst;       //Non-const means a value can be read or written
+    int const* ptrConst;    //Const means a value can only be read (int const*)    
+    ptrNonconst = &someValue;
+
+    //Can treat a non-const value as const (can treat a writable value as readonly)    
+    ptrConst = ptrNonconst;
+
+    //Cannot treat a const value as non-const (cannot treat a readonly value as writable)
+    //ptrNonconst = ptrConst;
+
+    //In rare cases can remove the constant if you are absolutely sure the value is writable
+    ptrNonconst = (int*)ptrConst;
+    ptrNonconst = const_cast<int*>(ptrConst);
+
+    //6 forms of constant references and pointers, dividing line is *, read right to left
+    // 1)       T *         pointer to T (ptr: RW, value: RW)
+    // 2)       T * const   const pointer to T (ptr: R, value: RW)
+    // 3) T const *         pointer to const T (ptr: RW, value: R)      
+    // 4) const T *         pointer to T const (ptr: RW, value: R)
+    // 5) T const * const   const pointer to const T (ptr: R, value: R)
+    // 6) const T * const   const poitner to T const (ptr: R, value: R)
+    // Forms 3 and 4 are the same, forms 5 and 6 are the same
 }
 
 int main()
