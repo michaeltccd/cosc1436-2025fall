@@ -106,6 +106,92 @@ void CStringDemo()
     // or char const* for C strings that are const
 }
 
+void CStringFunctions()
+{
+    //Always init C strings to null
+    const int MaxInputSize = 100;
+    char input[MaxInputSize+1] = {0};
+    char output[MaxInputSize+1] = {0};
+
+    std::cout << "Input a value: ";
+    std::cin >> input;
+
+    //Common C string functions - #include <cstring>
+    int len = strlen(input);  //strlen(string) size_t :: returns size of string
+
+    //Copying a string
+    // std::string str;
+    // str = "Hello";
+    strcpy(output, input);   // strcpy(target, source) :: Copies source to target
+                             // It will null terminate the target string
+                             // If output is exactly the length of input then no NULL is written
+                             // If output is smaller than input then it overwrites memory (security vuln)
+    strncpy(output, input, MaxInputSize); //Strcpy(target, source, maxsize) :: Copies up to maxSize characters
+                           
+    //Concat a string
+    // str += " Done";
+    strcat(output, " Done");  // Concats the second string to the end of the first string
+    strncat(output, " Done", MaxInputSize);  
+
+    //Comparison
+    //  str1 == str2
+    strcmp(output, input); // Compares 2 strings, case sensitive (>0, =0, <0)
+    _stricmp(output, input); //Case insensitive
+    strncmp(output, input, MaxInputSize);  // Compares 2 strings up to max len
+
+    char* pos = strstr(input, "a"); // Find substring in string, returns pointer to start of substring or nullptr
+
+    //Conversion
+    int value = atoi("123");  // Parses string to int
+    value = atoi("123abc");  // 123
+    value = atoi("abc");  // 0
+    // atol -> Parses a string to a long
+    // atof -> Parses a string to a floating point value (double)
+
+    char* end;
+    value =strtol("123abc", &end, 0); //Parses a string to a long, using the base given
+                                      //And returns the last character parsed
+}
+
+void CPlusPlusStringFunctions()
+{
+    std::string input, output;
+
+    std::cout << "Enter a value: ";
+    std::cin >> input;
+
+    //Copying a string
+    output = input;
+
+    //Concat a string
+    output += " done";
+
+    //Compare
+    bool isEqual = input == output;
+
+    //Length of the string
+    int len = input.length();  //strlen(input)
+    bool isEmpty = input == "";
+    isEmpty = input.length() == 0;
+    isEmpty = input.empty();   //Preferred
+
+    //Resetting a string
+    output = "";   // strcpy(output, "");
+    output.clear();   // Clears a string
+
+    //Modification
+    output.append(" Done");  //strcat(output, " Done");
+    //output.insert()
+
+    //Find strings
+    input.find("a");   //strstr(input, "a");  /// iterator
+
+    std::string sub = input.substr(10);  //Gets the characters starting at index, up to the given length)
+    sub = input.substr(10, 4);
+
+    const char* ptr = input.c_str();  //Gets the C string version of the C++ string
+}
+
 int main()
 {    
     CharFunctionDemo();
