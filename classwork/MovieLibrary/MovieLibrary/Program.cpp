@@ -321,27 +321,61 @@ int ParseFields(std::string const& line, std::string fields[], int size)
 {
     int fieldIndex = 0;
     std::string field;
-    bool inString = false;
-
-    for (int index = 0; index < line.length(); ++index)
+    
+    for (int index = 0; index < line.length() && fieldIndex < size; ++index)
     {
+        //Comma marks end of previous field
         if (line[index] == ',')
         {
-            fields[fieldIndex] = field;
+            //Move the field value into the array and move to the next field
+            fields[fieldIndex++] = field;
             field = "";
-            ++fieldIndex;
-        } else if (isspace(line[index]))  //If instring then include
+        } else if (isspace(line[index]))   //Ignore whitespace
             continue;
         else if (line[index] == '"')
         {
-            field += line[index];                 
-            inString = !inString;
-        } else
+            //Read string until eof or we get to the next quote
+            int endString = line.find('"', index + 1);
+            if (endString < 0)  //Ran out of string
+                return -1;
+
+            //Field is everything between the quotes
+            field = line.substr(index + 1, (endString - index - 1));                          
+
+            //Jump the parsing to the end of the string
+            index = endString;
+        } else 
             field += line[index];
     };
 
-    fields[fieldIndex] = field;
+    //Whatever remains in the last field is moved to the last array element
+    fields[fieldIndex++] = field;
     return fieldIndex;
+}
+
+int ParseInt(std::string const& field)
+{
+    //Assume the string is valid because it is coming from the CSV file
+    return strtol(field.c_str(), nullptr, 10);
+}
+
+std::string ParseString(std::string const& field)
+{
+    if (field == "")
+        return field;
+
+    //Strip the quotes off
+    std::stringstream str;
+        
+    for (int index = 0; index < field.length(); ++index)
+    {
+        if (field[index] == '"' && (index == 0 || index == field.length() - 1))
+            continue;
+
+        str << field[index];
+    }
+
+    return str.str();
 }
 
 Movie* LoadMovie(std::string const& line)
@@ -349,10 +383,20 @@ Movie* LoadMovie(std::string const& line)
     if (line == "")
         return nullptr;
 
+    std::string fields[7];
+    int count = ParseFields(line, fields, 7);
+    if (count != 7)
+        return nullptr;
+
+    //Parse the strings into their appropriately typed fields
     Movie* pMovie = new Movie();
-    pMovie->id = 1;
-    pMovie->title = "Movie 1";
-    pMovie->runLength = 100;
+    pMovie->id = ParseInt(fields[0]);
+    pMovie->title = ParseString(fields[1]);
+    pMovie->releaseYear = ParseInt(fields[2]);
+    pMovie->runLength = ParseInt(fields[3]);
+    pMovie->isClassic = ParseInt(fields[4]) != 0;
+    pMovie->genres = ParseString(fields[5]);
+    pMovie->description = ParseString(fields[6]);
 
     return pMovie;
 }
@@ -370,14 +414,17 @@ void LoadMovies(const char* filename, Movie* movies[], int size)
     // eof()
     //if (file.eof())
         //end of file
-    for (int index = 0; index < size && !file.eof(); ++index)
+
+    //While we still have room and we haven't reached the EOF
+    int index = 0;
+    while (index < size && !file.eof())
     {
         std::string line;
         std::getline(file, line);
 
-        //Read a single character
-        char ch;
-        file.get(ch); //Read a single char
+        //Read/write a single character
+        //char ch;
+        //file.get(ch); //Read a single char
         //outfile.put(ch);  //Write a single char        
 
         //Error handling
@@ -385,19 +432,22 @@ void LoadMovies(const char* filename, Movie* movies[], int size)
         bool isBad = file.bad();  //Don't generally use this one
 
         bool isGood = file.good();   //Nobody really uses this
-        if (file.good())
-            ;  //Read was successful
+        //if (file.good())
+        //    ;  //Read was successful
 
         //Resets a failed file stream
         if (file.bad())
             file.clear();
         
+        //If movie loaded then add to array and move to next line
         Movie* pMovie = LoadMovie(line);
         if (pMovie)
-            movies[index] = pMovie;
+            movies[index++] = pMovie;
 
         //file.getline();  //C-String version
     }
+
+    //TODO: Need to find largest movie ID, if any and ensure we start there when adding new movies
 }
 
 std::string QuoteString(std::string const& value)
