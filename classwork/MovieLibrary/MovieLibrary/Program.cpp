@@ -20,7 +20,7 @@ struct Movie
     std::string genres;         //Optional (comma separated list of genres)
 };
 
-//TODO: Discuss
+// Discuss
 void ClearInputBuffer()
 {
     std::cin.ignore(INT32_MAX, '\n');
@@ -254,8 +254,11 @@ Movie* AddMovie ()
         else if (genre == " ")
             continue;
 
-        //TODO: Fix issue with having no genres to begin with
-        movie->genres = movie->genres + ", " + genre;
+        //Fix issue with having no genres to begin with
+        if (movie->genres.length() > 0)
+            movie->genres = movie->genres + ", " + genre;
+        else
+            movie->genres = genre;
     }
 
     movie->isClassic = Confirm("Is this a classic movie?");
@@ -314,9 +317,87 @@ void EditMovie()
     DisplayWarning("Not implemented yet");
 }
 
-void LoadMovies(Movie* movies[], int size)
+int ParseFields(std::string const& line, std::string fields[], int size)
 {
-    //TODO: Implement this
+    int fieldIndex = 0;
+    std::string field;
+    bool inString = false;
+
+    for (int index = 0; index < line.length(); ++index)
+    {
+        if (line[index] == ',')
+        {
+            fields[fieldIndex] = field;
+            field = "";
+            ++fieldIndex;
+        } else if (isspace(line[index]))  //If instring then include
+            continue;
+        else if (line[index] == '"')
+        {
+            field += line[index];                 
+            inString = !inString;
+        } else
+            field += line[index];
+    };
+
+    fields[fieldIndex] = field;
+    return fieldIndex;
+}
+
+Movie* LoadMovie(std::string const& line)
+{
+    if (line == "")
+        return nullptr;
+
+    Movie* pMovie = new Movie();
+    pMovie->id = 1;
+    pMovie->title = "Movie 1";
+    pMovie->runLength = 100;
+
+    return pMovie;
+}
+    
+
+void LoadMovies(const char* filename, Movie* movies[], int size)
+{
+    std::ifstream file;
+
+    file.open(filename, std::ios::in);
+    if (file.fail())
+        return;
+
+    //Read each line, until end of file
+    // eof()
+    //if (file.eof())
+        //end of file
+    for (int index = 0; index < size && !file.eof(); ++index)
+    {
+        std::string line;
+        std::getline(file, line);
+
+        //Read a single character
+        char ch;
+        file.get(ch); //Read a single char
+        //outfile.put(ch);  //Write a single char        
+
+        //Error handling
+        bool isFailed = file.fail();
+        bool isBad = file.bad();  //Don't generally use this one
+
+        bool isGood = file.good();   //Nobody really uses this
+        if (file.good())
+            ;  //Read was successful
+
+        //Resets a failed file stream
+        if (file.bad())
+            file.clear();
+        
+        Movie* pMovie = LoadMovie(line);
+        if (pMovie)
+            movies[index] = pMovie;
+
+        //file.getline();  //C-String version
+    }
 }
 
 std::string QuoteString(std::string const& value)
@@ -334,7 +415,6 @@ std::string QuoteString(std::string const& value)
 
     return str.str();
 }
-
 
 void SaveMovie(std::ofstream& file, Movie* pMovie)
 {
@@ -378,6 +458,9 @@ void SaveMovies(const char* filename, Movie* movies[], int size)
     //file << "Writing to the file";
     for (int index = 0; index < size; ++index)
         SaveMovie(file, movies[index]);
+
+    //Release the file
+    file.close();
 }
 
 int main()
@@ -388,7 +471,7 @@ int main()
     const int MaximumMovies = 100;
     Movie* movies[MaximumMovies] = {0};
 
-    LoadMovies(movies, MaximumMovies);
+    LoadMovies(FileName, movies, MaximumMovies);
 
     //Display main menu
     bool done = false;
